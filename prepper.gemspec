@@ -26,4 +26,9 @@ Gem::Specification.new do |spec|
   spec.bindir        = "bin"
   spec.executables   = "prepper"
   spec.require_paths = ["lib"]
+
+  spec.add_dependency 'zeitwerk'
+  spec.add_dependency 'sshkit'
+  spec.add_dependency 'tty-option'
+  spec.add_development_dependency 'byebug'
 end
