@@ -4,7 +4,7 @@ module Prepper
   class Runner
     include SSHKit::DSL
 
-    attr_accessor :host
+    attr_accessor :host, :packages, :commands, :user, :port
 
     def self.run(config)
       runner = new
@@ -13,37 +13,27 @@ module Prepper
     end
 
     def initialize
-      @package_registry = PackageRegistry.new
+      @packages = []
       @commands = []
       @user = "root"
       @port = 22
     end
 
     def run
-      puts "running on #{@host}"
-      @commands.each do |command|
-        on [{hostname: @host, user: @user, port: @port, ssh_options: @ssh_options}], in: :sequence do |host|
-          puts "Now executing on #{host}"
-          within command.within do
-            as command.user  do
-              with command.env do
-                execute command.to_s
-              end
-            end
-          end
-        end
-      end
+      puts "running on #{host}"
+      @packages.each(&:process)
+
     end
 
-    def host(host)
+    def server_host(host)
       @host = host
     end
 
-    def user(user)
+    def server_user(user)
       @user = user
     end
 
-    def port(port)
+    def server_port(port)
       @port = port
     end
 
@@ -51,11 +41,20 @@ module Prepper
       @ssh_options = ssh_options
     end
 
+    def server_hash
+      {hostname: host, user: user, port: port, ssh_options: @ssh_options}
+    end
 
     def add_command(command, opts = {})
+      package = Packages::Base.new("base", opts)
+      package.server_hash = server_hash
       opts[:user] ||= "root"
       opts[:within] ||= "/"
-      @commands << Command.new(command, opts)
+      package.commands << Command.new(command, opts)
+      @packages << package
+    end
+
+    def package(name, &block)
     end
   end
 end
