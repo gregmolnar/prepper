@@ -2,7 +2,6 @@ require 'sshkit'
 require 'sshkit/dsl'
 module Prepper
   class Runner
-    include SSHKit::DSL
 
     attr_accessor :host, :packages, :commands, :user, :port
 
@@ -21,8 +20,9 @@ module Prepper
 
     def run
       puts "running on #{host}"
-      @packages.each(&:process)
 
+      # require 'byebug'; debugger
+      @packages.each(&:process)
     end
 
     def server_host(host)
@@ -46,15 +46,16 @@ module Prepper
     end
 
     def add_command(command, opts = {})
-      package = Packages::Base.new("base", opts)
-      package.server_hash = server_hash
+      package = Package.new("base", opts)
+      package.runner = self
       opts[:user] ||= "root"
       opts[:within] ||= "/"
       package.commands << Command.new(command, opts)
       @packages << package
     end
 
-    def package(name, &block)
+    def package(name, opts = {}, &block)
+      @packages << Package.new(name, opts.merge(runner: self), &block)
     end
   end
 end
