@@ -20,8 +20,6 @@ module Prepper
 
     def run
       puts "running on #{host}"
-
-      # require 'byebug'; debugger
       @packages.each(&:process)
     end
 

@@ -2,6 +2,8 @@ module Prepper
   class Package
     include SSHKit::DSL
     include Tools::Users
+    include Tools::File
+
     attr_accessor :name, :runner, :commands, :verifications
 
     def initialize(name, opts = {}, &block)
@@ -15,8 +17,7 @@ module Prepper
 
     def should_run?
       return true if @verifications.empty?
-      # require 'byebug'; debugger
-      @verifications.all? do |verification|
+      return @verifications.all? do |verification|
         !test_command(verification.call)
       end
     end
@@ -48,7 +49,11 @@ module Prepper
         within command.within do
           as command.user  do
             with command.env do
-              send(method, command.to_s).inspect
+              if respond_to? command.to_s.to_sym
+                send command.to_s.to_sym, *command.opts[:params]
+              else
+                send(method, command.to_s)
+              end
             end
           end
         end

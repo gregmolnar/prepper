@@ -1,9 +1,10 @@
 module Prepper
   class Command
-    attr_reader :command, :user, :within, :env, :sudo
+    attr_reader :command, :user, :within, :env, :sudo, :opts
 
     def initialize(command, opts = {})
       @command = command
+      @opts = opts
       @user = opts[:user] || "root"
       @within = opts[:within] || "/"
       @env = opts[:env] || {}
