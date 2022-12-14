@@ -4,6 +4,7 @@ loader.ignore("#{__dir__}/sshkit_ext.rb")
 loader.setup
 
 require 'sshkit_ext'
+require 'shellwords'
 
 module Prepper
   class Error < StandardError; end

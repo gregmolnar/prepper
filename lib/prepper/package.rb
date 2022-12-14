@@ -1,8 +1,11 @@
 module Prepper
   class Package
     include SSHKit::DSL
+    include Tools::Apt
     include Tools::Users
     include Tools::File
+    include Tools::Text
+    include Tools::Rbenv
 
     attr_accessor :name, :runner, :commands, :verifications
 
