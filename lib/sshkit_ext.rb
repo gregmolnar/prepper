@@ -5,7 +5,6 @@ SSHKit::Backend::Netssh.class_eval do
     # remote file.
     #
     def put!(string_or_io, remote_path, opts={})
-      puts "uploading...."
       sudo_exec = ->(*cmd) {
         cmd = [:sudo] + cmd if opts[:sudo]
         execute *cmd

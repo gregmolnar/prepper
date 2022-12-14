@@ -5,7 +5,7 @@ module Prepper
         base.class_eval do
           def add_user(username, opts = {})
             opts[:flags] << ' --gecos ,,,'
-            @commands << Command.new("adduser #{username} #{opts[:flags]}", sudo: true)
+            @commands << Command.new("adduser #{username} #{opts[:flags]}", sudo: true, verifier: has_user?(username))
           end
 
           def has_user?(username, opts = {})

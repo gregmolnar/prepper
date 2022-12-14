@@ -10,24 +10,40 @@ module Prepper
           end
 
           def directory(path, opts = {})
-            @commands <<  Command.new("mkdir -p #{path}", opts.merge(sudo: true))
+            @commands <<  Command.new("mkdir -p #{path}", opts.merge(sudo: true, verifier: has_directory?(path)))
             @commands <<  Command.new("chown #{opts[:user]}:#{opts[:user]} #{path}", sudo: true) if opts[:user]
             @commands <<  Command.new("chmod #{opts[:mode]} #{path}", sudo: true) if opts[:mode]
           end
 
           def has_directory?(path)
-            Command.new("-d #{path}", sudo: true)
+            Command.new("test -d #{path}", sudo: true)
           end
 
           def file(path, opts = {})
             opts[:locals] ||= {}
             content = opts[:content] || render_template(opts[:template], opts[:locals])
             io = StringIO.new(content)
-            @commands << Command.new("put!", {params: [io, path, {owner: opts[:owner], mode: opts[:mode]}]})
+            @commands << Command.new("put!", {params: [io, path, {owner: opts[:owner], mode: opts[:mode]}], verifier: has_file?(path)})
           end
 
           def has_file?(path)
-            Command.new("-f #{path}", sudo: true)
+            Command.new("test -f #{path}", sudo: true)
+          end
+
+          def symlink(link, target, opts = {})
+            opts.merge!(
+              sudo: true,
+              verifier: has_symlink?(link)
+            )
+            @commands << Command.new("ln -s #{target} #{link}", opts)
+          end
+
+          def has_symlink?(link, file = nil)
+            if file
+              Command.new("'#{file}' = `readlink #{link}`")
+            else
+              Command.new("test -L #{link}", sudo: true)
+            end
           end
 
           def matches_content?(path, content)

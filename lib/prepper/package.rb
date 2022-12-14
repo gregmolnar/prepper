@@ -32,8 +32,22 @@ module Prepper
         return
       end
       @commands.each do |command|
-        execute_command(command)
+        if command.verifier
+          if !test_command(command.verifier)
+            execute_command(command)
+          else
+            SSHKit.config.output.write(SSHKit::LogMessage.new(1, "Skipping command #{command.to_s}"))
+          end
+        else
+          execute_command(command)
+        end
       end
+    end
+
+    def add_command(command, opts = {})
+      opts[:user] ||= "root"
+      opts[:within] ||= "/"
+      @commands << Command.new(command, opts)
     end
 
     def execute_command(command)
@@ -52,7 +66,12 @@ module Prepper
               if respond_to? command.to_s.to_sym
                 send command.to_s.to_sym, *command.opts[:params]
               else
+                if method == :execute
+                  execute command.to_s
+                else
+
                 send(method, command.to_s)
+                end
               end
             end
           end
