@@ -1,4 +1,5 @@
 require 'erb'
+require 'digest/md5'
 module Prepper
   module Tools
     module File
@@ -21,13 +22,24 @@ module Prepper
 
           def file(path, opts = {})
             opts[:locals] ||= {}
+            opts[:verify_content] ||= true
             content = opts[:content] || render_template(opts[:template], opts[:locals])
+            verifier = if opts[:verify_content]
+              matches_content?(path, content)
+            else
+              has_file?(path)
+            end
             io = StringIO.new(content)
-            @commands << Command.new("put!", {params: [io, path, {owner: opts[:owner], mode: opts[:mode]}], verifier: has_file?(path)})
+            @commands << Command.new("put!", {params: [io, path, {owner: opts[:owner], mode: opts[:mode]}], verifier: verifier})
           end
 
           def has_file?(path)
             Command.new("test -f #{path}", sudo: true)
+          end
+
+          def matches_content?(path, content)
+            md5 = Digest::MD5.hexdigest(content)
+            Command.new("md5sum #{path} | cut -f1 -d' '`\" = \"#{md5}\"", sudo: true, verifier: has_file?(path))
           end
 
           def symlink(link, target, opts = {})
@@ -44,10 +56,6 @@ module Prepper
             else
               Command.new("test -L #{link}", sudo: true)
             end
-          end
-
-          def matches_content?(path, content)
-
           end
 
           def render_template(template, locals)
