@@ -18,6 +18,7 @@ upload files to the server, etc.
 A simple example:
 
 ```ruby
+
 server_host "YOUR_SERVER_IP"
 server_port 22
 server_user "root"
