@@ -1,5 +1,6 @@
 module Prepper
   module Tools
+    # Helper methods to interact with Apt
     module Apt
       # Updates apt repositories
       def apt_update
@@ -14,6 +15,8 @@ module Prepper
         end
       end
 
+      # Verifier command to checks if an apt package is installed
+      # @param package [String] name of the package
       def has_apt_package?(package)
         Command.new("dpkg --status #{package} | grep 'ok installed'", sudo: true)
       end
