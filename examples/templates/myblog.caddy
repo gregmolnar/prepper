@@ -1,0 +1,23 @@
+www.myblog.com {
+  redir https://{host}{uri}
+}
+
+myblog.com {
+  root * /home/deploy/domains/myblog.com/public
+
+
+  log {
+    output file /home/deploy/domains/myblog.com/shared/log/access.log {
+      roll_size 10MB
+      roll_keep 10
+    }
+  }
+
+  encode zstd gzip
+
+  file_server
+
+  @notStatic {
+    not file
+  }
+}

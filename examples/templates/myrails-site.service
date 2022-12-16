@@ -1,0 +1,21 @@
+[Unit]
+Description=Puma HTTP Server for myrails-site.com (production)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/deploy/domains/myrails-site.com/current
+# Support older bundler versions where file descriptors weren't kept
+# See https://github.com/rubygems/rubygems/issues/3254
+ExecStart=/home/deploy/.rbenv/bin/rbenv exec bundle exec --keep-file-descriptors puma -C /home/deploy/domains/myrails-site.com/shared/puma.rb
+ExecReload=/bin/kill -USR1 $MAINPID
+StandardOutput=append:/home/deploy/domains/myrails-site.com/shared/log/puma_access.log
+StandardError=append:/home/deploy/domains/myrails-site.com/shared/log/puma_error.log
+
+Restart=always
+RestartSec=1
+
+SyslogIdentifier=puma
+
+[Install]
+WantedBy=multi-user.target

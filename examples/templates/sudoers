@@ -1,0 +1,3 @@
+%deploy ALL= NOPASSWD: /bin/systemctl start puma_move_to_azores
+%deploy ALL= NOPASSWD: /bin/systemctl stop puma_move_to_azores
+%deploy ALL= NOPASSWD: /bin/systemctl restart puma_move_to_azores

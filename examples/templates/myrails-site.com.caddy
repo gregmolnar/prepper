@@ -1,0 +1,25 @@
+www.myrails-site.com {
+  redir https://{host}{uri}
+}
+
+myrails-site.com {
+  root * /home/deploy/domains/myrails-site.com/current/public
+
+
+  log {
+    output file /home/deploy/domains/myrails-site.com/shared/log/access.log {
+      roll_size 10MB
+      roll_keep 10
+    }
+  }
+
+  encode zstd gzip
+
+  file_server
+
+  @notStatic {
+    not file
+  }
+
+  reverse_proxy @notStatic unix//home/deploy/domains/myrails-site.com/shared/tmp/sockets/puma.sock
+}
