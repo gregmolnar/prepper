@@ -12,7 +12,7 @@ module Prepper
 
           def directory(path, opts = {})
             @commands <<  Command.new("mkdir -p #{path}", opts.merge(sudo: true, verifier: has_directory?(path)))
-            @commands <<  Command.new("chown #{opts[:user]}:#{opts[:user]} #{path}", sudo: true) if opts[:user]
+            @commands <<  Command.new("chown #{opts[:owner]} #{path}", sudo: true) if opts[:owner]
             @commands <<  Command.new("chmod #{opts[:mode]} #{path}", sudo: true) if opts[:mode]
           end
 
