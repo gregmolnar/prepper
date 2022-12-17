@@ -48,6 +48,8 @@ end
 
 You can see a full example in [examples/config.rb](examples/config.rb). You would run that file with `bundle exec prepper config.rb` to provision the server.
 
+The API documentation can be found on rubydoc: [https://rubydoc.info/github/gregmolnar/prepper](https://rubydoc.info/github/gregmolnar/prepper).
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
