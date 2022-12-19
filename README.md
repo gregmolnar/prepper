@@ -1,7 +1,7 @@
 # Prepper
 
 Prepper is a simple server provisioning tool, built on top of SSHKit. You can
-use it to script your server build process.
+use it to script your server build process. It is heavily inspired by (Sprinkle)[https://github.com/sprinkle-tool/sprinkle], but Sprinkle doesn't seem to be maintained anymore, that's why Prepper was born.
 
 
 ## Installation
@@ -58,7 +58,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/prepper. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/prepper/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/gregmolnar/prepper. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/gregmolnar/prepper/blob/master/CODE_OF_CONDUCT.md).
 
 
 ## License
@@ -67,4 +67,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Prepper project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/prepper/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the Prepper project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/gregmolnar/prepper/blob/master/CODE_OF_CONDUCT.md).
