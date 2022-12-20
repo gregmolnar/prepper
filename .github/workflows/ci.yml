@@ -29,5 +29,5 @@ jobs:
       run: ./bin/setup
 
     - name: Run tests
-      run: rake spec
+      run: rake test
 
