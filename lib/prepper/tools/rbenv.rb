@@ -11,13 +11,13 @@ module Prepper
 
         append_text 'export PATH="$HOME/.rbenv/bin:$PATH"', "/home/#{user}/.profile"
         append_text 'eval "$(rbenv init -)"', "/home/#{user}/.profile"
-        chown "/home/#{user}/.profile", 'deploy:deploy'
+        chown "/home/#{user}/.profile", "#{user}:#{user}"
       end
 
       # install a given ruby version for a given user
       # @param user [String] name of the user
       # @param version [String] ruby version
-      def install_ruby(user, version)
+      def install_ruby(user, version, opts = '')
         @commands << Command.new("sudo -u #{user} -i RUBY_CONFIGURE_OPTS='#{opts}' rbenv install #{version}", verifier: has_directory?("/home/#{user}/.rbenv/versions/#{version}"))
 
         @commands << Command.new("sudo -u #{user} -i rbenv rehash")
