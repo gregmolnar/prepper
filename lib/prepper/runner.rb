@@ -6,20 +6,20 @@ module Prepper
     attr_accessor :host, :packages, :commands, :user, :port
 
     def self.run(config)
-      runner = new
-      runner.instance_eval config
+      runner = new(config)
       runner.run
+      runner
     end
 
-    def initialize
+    def initialize(config)
       @packages = []
       @commands = []
       @user = "root"
       @port = 22
+      instance_eval config
     end
 
     def run
-      puts "running on #{host}"
       @packages.each(&:process)
     end
 
